@@ -1,4 +1,5 @@
 import os
+from dataclasses import dataclass
 
 from datetime import datetime
 
@@ -6,6 +7,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
+import tyro
 
 from tqdm import tqdm
 from torch.utils.tensorboard import SummaryWriter
@@ -14,13 +16,18 @@ from src.loading import BachDataset
 from src.model import Autoencoder
 
 
+@dataclass
+class Args:
+    data_root_path: str
+
 
 def train_model():
+    args = tyro.cli(Args)
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     writer = SummaryWriter(os.path.join('models', CURRENT_TIME))
 
     model = Autoencoder().to(device)
-    dataset = BachDataset("bach-dataset")
+    dataset = BachDataset(args.data_root_path)
     dataloader = torch.utils.data.DataLoader(dataset, batch_size=1, shuffle=True)
     optimizer = optim.Adam(model.parameters())
     criterion = nn.MSELoss()
