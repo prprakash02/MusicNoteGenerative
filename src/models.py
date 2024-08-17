@@ -18,7 +18,7 @@ class Encoder(nn.Module):
 
     def extract_notes(self, x):
         x = self.forward(x)
-        # something like this x = torch.argmax(x, dim=1)
+        x = torch.argmax(x, dim=1)
         return x
 
 
@@ -50,3 +50,18 @@ class Autoencoder(nn.Module):
 
     def extract_notes(self, x):
         return self.encoder.extract_notes(x)
+
+
+class Identity(nn.Module):
+    def __init__(self):
+        super().__init__()
+
+    def extract_notes(self, x):
+        max = torch.argmax(x, dim=0)
+        return max
+
+
+MODELS = {
+    "Identity": Identity,
+    "Autoencoder": Autoencoder,
+}

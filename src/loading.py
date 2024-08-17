@@ -8,10 +8,12 @@ import torch
 N_MELS = 128
 
 
-def get_spectrogram(audio_file: str) -> np.ndarray:
+def get_spectrogram(audio_file: str, return_sr: bool = False) -> np.ndarray | tuple[np.ndarray, int]:
     amplitudes, sr = librosa.load(audio_file)
     spectrogram = librosa.feature.melspectrogram(y=amplitudes, sr=sr, n_mels=N_MELS)
     spectrogram = librosa.power_to_db(spectrogram, ref=np.max)
+    if return_sr:
+        return spectrogram, sr
     return spectrogram
 
 

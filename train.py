@@ -13,7 +13,7 @@ from tqdm import tqdm
 from torch.utils.tensorboard import SummaryWriter
 
 from src.loading import BachDataset
-from src.model import Autoencoder
+from src.models import Autoencoder
 
 
 @dataclass
